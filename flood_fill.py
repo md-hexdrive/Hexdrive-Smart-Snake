@@ -4,13 +4,13 @@ import time
 def generate_test_board(width, height):
     test_board = np.zeros((width, height), dtype=np.int32)
     
-    for i in range(1, 4):
-        test_board[i][height-1] = 4
-    test_board[5][height-1] = 5
-    for i in range(3, 6):
-        test_board[i][height-2] = 4
-    #np.fill_diagonal(test_board, 4)
-    #np.fill_diagonal(np.fliplr(test_board), 5)
+#     for i in range(1, 4):
+#         test_board[i][height-1] = 4
+#     test_board[5][height-1] = 5
+#     for i in range(3, 6):
+#         test_board[i][height-2] = 4
+    np.fill_diagonal(test_board, 4)
+    np.fill_diagonal(np.fliplr(test_board), 5)
     return test_board
 
 def flood_fill_board(x, y, board, possible_moves):
@@ -72,39 +72,50 @@ def flood_fill(start_x, start_y, board):
         x, y = queue[0]
         del queue[0]
         
-        if y > 0 and y < board.shape[1]-1:
-            move_up = (x, y+1)
-            if board_copy[move_up] <= SAFE_SPACE and move_up not in queue:
-                board_copy[move_up] = 255
-                queue.append(move_up)
-                free_space_count += 1            
-        if y > 0 and y < board.shape[1]-1:
-            move_down = (x, y-1)
-            if board_copy[move_down] <= SAFE_SPACE and move_down not in queue:
-                board_copy[move_down] = 255
-                queue.append(move_down)
-                free_space_count += 1
-        if x > 0 and x < board.shape[0]-2:
-            #print(x, y)
-            move_left = (x-1, y)
-            if board_copy[move_left] <= SAFE_SPACE and move_left not in queue:
-                board_copy[move_left] = 255
-                queue.append(move_left)
-                free_space_count += 1
-        if x > 0 and x < board.shape[0]-2:
-            move_right = (x+1, y)
-            if board_copy[move_right] <= SAFE_SPACE and move_right not in queue:
-                board_copy[move_right] = 255
-                queue.append(move_right)
-                free_space_count += 1
+        move_up = (x, y+1)
+        move_down = (x, y-1)
+        move_left = (x-1, y)
+        move_right = (x+1, y)
+        moves = [move_up, move_down, move_left, move_right]
         
+        for move in moves:
+            if move[0] in range(board.shape[0]) and move[1] in range(board.shape[1]) and board_copy[move] <= SAFE_SPACE and move not in queue:
+                board_copy[move] = 255
+                queue.append(move)
+                free_space_count += 1
+#         if y > 0 and y < board.shape[1]-1:
+#             move_up = (x, y+1)
+#             if board_copy[move_up] <= SAFE_SPACE and move_up not in queue:
+#                 board_copy[move_up] = 255
+#                 queue.append(move_up)
+#                 free_space_count += 1            
+#         if y > 0 and y < board.shape[1]-1:
+#             move_down = (x, y-1)
+#             if board_copy[move_down] <= SAFE_SPACE and move_down not in queue:
+#                 board_copy[move_down] = 255
+#                 queue.append(move_down)
+#                 free_space_count += 1
+#         if x > 0 and x < board.shape[0]-2:
+#             #print(x, y)
+#             move_left = (x-1, y)
+#             if board_copy[move_left] <= SAFE_SPACE and move_left not in queue:
+#                 board_copy[move_left] = 255
+#                 queue.append(move_left)
+#                 free_space_count += 1
+#         if x > 0 and x < board.shape[0]-2:
+#             move_right = (x+1, y)
+#             if board_copy[move_right] <= SAFE_SPACE and move_right not in queue:
+#                 board_copy[move_right] = 255
+#                 queue.append(move_right)
+#                 free_space_count += 1
+#         
 
-        
+    print(board_copy)
 
     return board_copy, free_space_count
 
 if __name__ == "__main__":
-    x, y = 5, 10
+    x, y = 5, 5
     #def test_fill(x, y, test_board):    
 
     test_board = generate_test_board(11, 11)
@@ -112,7 +123,7 @@ if __name__ == "__main__":
     print(test_board)
     t1 = time.time()
     #board_copy, free_space = flood_fill(x, y, test_board)
-    moves = flood_fill_board(x, y, test_board, [#"up",
+    moves = flood_fill_board(x, y, test_board, ["up",
                                                 "down", "left", "right"])
     #time.sleep(0.1)
     t2 = time.time()
