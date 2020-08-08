@@ -51,12 +51,8 @@ def safe_move(board, board_width, board_height, my_head, my_snake, other_snakes,
     if len(possible_moves) > 1:
         possible_moves = watch_heads(my_head, my_snake, board, possible_moves, other_snakes)
     
-    if len(other_snakes) == 1 and my_snake['health'] < 20 or (my_snake['health'] < 40):
+    if len(other_snakes) == 1 and my_snake['health'] < 20 or (my_snake['health'] < 40) or len(other_snakes) == 2:
         move = find_food(board, my_snake, food, possible_moves, other_snakes)
-#     if my_snake['health'] < 40:
-#         move = find_food(board, my_snake, food, possible_moves, other_snakes)
-#         return move
-
     
     #if len(possible_moves) > 1:
     #    possible_moves = best_free_space(x, y, board, possible_moves)
