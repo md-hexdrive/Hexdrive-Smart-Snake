@@ -224,9 +224,9 @@ def find_traps(my_head, board, board_width, board_height, possible_moves):
 # can you move into this point without dying?
 def is_illegal_move(point, board, board_width, board_height):
     
-    if point[0] > board_width-1 or point[0] < 0:
+    if point[0] not in range(board_width):
         return True
-    elif point[1] > board_height-1 or point[1] < 0:
+    elif point[1] not in range(board_height):
         return True
     elif board[point] > SAFE_SPACE:
         return True
