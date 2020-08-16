@@ -1,21 +1,21 @@
 import os
 import random
-
+import time
 import cherrypy
 
 import behaviour
 import process_board
-
+import game_tracker
 """
 This is a simple Battlesnake server written in Python.
 For instructions see https://github.com/BattlesnakeOfficial/starter-snake-python/README.md
 """
 
-num_games = 0
-victories = 0
-losses = 0
 
 class Battlesnake(object):
+    def __init__(self):
+        self.stats = game_tracker.GameTracker()
+
     @cherrypy.expose
     @cherrypy.tools.json_out()
     def index(self):
@@ -38,8 +38,9 @@ class Battlesnake(object):
         # cherrypy.request.json contains information about the game that's about to be played.
         # TODO: Use this function to decide how your snake is going to look on the board.
         data = cherrypy.request.json
-
+        self.stats.add_game(data)
         print("START")
+        
         return "ok"
 
     @cherrypy.expose
@@ -62,28 +63,8 @@ class Battlesnake(object):
         # This function is called when a game your snake was in ends.
         # It's purely for informational purposes, you don't have to make any decisions here.
         data = cherrypy.request.json
-        global num_games
-        global victories
-        global losses
 
-        print("END")
-        
-        num_games += 1
-        if len(data['board']['snakes']) > 0:
-            print("Winner:", data['board']['snakes'][0]['name'])
-        if data['you'] in data['board']['snakes']:
-            print("You Won!!!")
-            victories += 1
-        else:
-            print("You Lost")
-            losses += 1
-        
-        print("Total Games:", num_games)
-        print("Victories:", victories)
-        print("defeats:", losses)
-        
-        print("\n\nPercent Won:", int((victories / num_games) * 100))
-        print("\nPercent Lost:", int((losses / num_games) * 100))
+        self.stats.game_over(data)
         #cherrypy.engine.exit()
         return "ok"
 
@@ -92,8 +73,9 @@ if __name__ == "__main__":
 
     server = Battlesnake()
     cherrypy.config.update({"server.socket_host": "0.0.0.0"})
-    cherrypy.config.update(
-        {"server.socket_port": int(os.environ.get("PORT", "9090")),}
-    )
+    cherrypy.config.update({
+        "server.socket_port":
+        int(os.environ.get("PORT", "9090")),
+    })
     print("Starting Battlesnake Server...")
     cherrypy.quickstart(server)

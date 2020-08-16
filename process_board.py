@@ -1,6 +1,6 @@
 import server
 import behaviour
-
+from game_board import *
 import numpy as np
 import random
 import math
@@ -50,7 +50,7 @@ def parse_json(data):
 
 
 def fill_board(board_width, board_height, my_head, my_snake, other_snakes, food, hazards):
-    board = np.zeros((board_width+1, board_height+1), dtype=np.int32)
+    board = np.zeros((board_width, board_height), dtype=np.int8)
     
     for square in food:
         x = square['x']
@@ -71,25 +71,26 @@ def fill_board(board_width, board_height, my_head, my_snake, other_snakes, food,
         if snake['length'] >= my_snake['length']: # Todo: change this comparision >= if snake runs headlong into other snakes
             last_enemy_pos = snake['body'][1]
             enemy_travel_dir = behaviour.direction(last_enemy_pos, snake['head'])
-            if enemy_travel_dir == "left":
-                board[x-1][y] = ENEMY_MOST_LIKELY_MOVE
-            else:
-                board[x-1][y] = ENEMY_NEXT_MOVE
-            
-            if enemy_travel_dir == "right":
-                board[x+1][y] = ENEMY_MOST_LIKELY_MOVE
-            else:
-                board[x+1][y] = ENEMY_NEXT_MOVE
-            
-            if enemy_travel_dir == "down":
-                board[x][y-1] = ENEMY_MOST_LIKELY_MOVE
-            else:
-                board[x][y-1] = ENEMY_NEXT_MOVE
-            
-            if enemy_travel_dir == "up":
-                board[x][y+1] = ENEMY_MOST_LIKELY_MOVE
-            else:
-                board[x][y+1] = ENEMY_NEXT_MOVE
+            if in_bounds(board, get_move("left", x, y)):
+              if enemy_travel_dir == "left":
+                  board[x-1][y] = ENEMY_MOST_LIKELY_MOVE
+              else:
+                  board[x-1][y] = ENEMY_NEXT_MOVE
+            if in_bounds(board, get_move("right", x, y)):
+              if enemy_travel_dir == "right":
+                  board[x+1][y] = ENEMY_MOST_LIKELY_MOVE
+              else:
+                  board[x+1][y] = ENEMY_NEXT_MOVE
+            if in_bounds(board, get_move("down", x, y)):
+              if enemy_travel_dir == "down":
+                  board[x][y-1] = ENEMY_MOST_LIKELY_MOVE
+              else:
+                  board[x][y-1] = ENEMY_NEXT_MOVE
+            if in_bounds(board, get_move("up", x, y)):
+              if enemy_travel_dir == "up":
+                  board[x][y+1] = ENEMY_MOST_LIKELY_MOVE
+              else:
+                  board[x][y+1] = ENEMY_NEXT_MOVE
             
         
         for square in snake['body']:
