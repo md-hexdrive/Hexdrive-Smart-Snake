@@ -3,7 +3,7 @@ from process_board import *
 
 def in_bounds(board, x, y=None):
   if type(x) == type(tuple()):
-    if x[0] in range(board.shape[0]) and x[1] in range(board.shape[0]):
+    if x[0] in range(board.shape[0]) and x[1] in range(board.shape[1]):
       return True
     else:
       return False

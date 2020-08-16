@@ -50,7 +50,7 @@ def parse_json(data):
 
 
 def fill_board(board_width, board_height, my_head, my_snake, other_snakes, food, hazards):
-    board = np.zeros((board_width, board_height), dtype=np.int8)
+    board = np.zeros((board_width, board_height), dtype=np.int32)
     
     for square in food:
         x = square['x']
