@@ -4,6 +4,7 @@ Controls the battlesnakes logic and behaviour
 """
 
 import server
+from game_board import *
 from sidewind import *
 from process_board import *
 from flood_fill import *
@@ -51,7 +52,8 @@ def safe_move(board, board_width, board_height, my_head, my_snake, other_snakes,
     if len(possible_moves) > 1:
         possible_moves = watch_heads(my_head, my_snake, board, possible_moves, other_snakes)
     
-    if len(other_snakes) == 1 and my_snake['health'] < 20 or (my_snake['health'] < 40) or len(other_snakes) == 2:
+    if my_snake['health'] < 80 or my_snake['length'] < 6:
+    #len(other_snakes) == 1 and my_snake['health'] < 20 or (my_snake['health'] < 40) or len(other_snakes) == 2:
         move = find_food(board, my_snake, food, possible_moves, other_snakes)
     
     #if len(possible_moves) > 1:
@@ -67,22 +69,23 @@ def safe_move(board, board_width, board_height, my_head, my_snake, other_snakes,
         move = random.choice(possible_moves)
         return move
     if len(possible_moves) == 0 and move == "":
-        if ENEMY_NEXT_MOVE == board[x+1,y]:
+        
+        if in_bounds(board, move_right) and ENEMY_NEXT_MOVE == board[move_right]:
             move = "right"
-        elif ENEMY_NEXT_MOVE == board[x-1,y]:
+        elif in_bounds(board, move_left) and ENEMY_NEXT_MOVE == board[move_left]:
             move = "left"
-        elif ENEMY_NEXT_MOVE == board[x, y-1]:
+        elif in_bounds(board, move_down) and ENEMY_NEXT_MOVE == board[move_down]:
             move = "down"
-        elif ENEMY_NEXT_MOVE == board[x, y+1]:
+        elif in_bounds(board, move_up) and ENEMY_NEXT_MOVE == board[move_up]:
             move = "up"
     else:
-        if ENEMY_MOST_LIKELY_MOVE == board[x+1,y]:
+        if in_bounds(board, move_right) and ENEMY_MOST_LIKELY_MOVE == board[move_right]:
             move = "right"
-        elif ENEMY_MOST_LIKELY_MOVE == board[x-1,y]:
+        elif in_bounds(board, move_left) and ENEMY_MOST_LIKELY_MOVE == board[move_left]:
             move = "left"
-        elif ENEMY_MOST_LIKELY_MOVE == board[x, y-1]:
+        elif in_bounds(board, move_down) and ENEMY_MOST_LIKELY_MOVE == board[move_down]:
             move = "down"
-        elif ENEMY_MOST_LIKELY_MOVE == board[x, y+1]:
+        elif in_bounds(board, move_up) and ENEMY_MOST_LIKELY_MOVE == board[move_up]:
             move = "up"
     
 #     if len(possible_moves) == 1:
