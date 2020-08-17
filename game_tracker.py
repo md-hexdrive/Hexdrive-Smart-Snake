@@ -46,9 +46,13 @@ class GameTracker:
                 return game
 
     def game_over(self, data):
-        
+
         game = self.__getitem__(data)
         if not game.is_solo:
+            if len(data['board']['snakes']) > 0:
+                print("Winner:", data['board']['snakes'][0]['name'])
+            else:
+              print("Game ended in a draw")
             if survived(data):
                 self.won += 1
                 print("You Won!")
@@ -57,12 +61,12 @@ class GameTracker:
                 print("Sorry, You lost")
         else:
             print("Solo game")
-        
+
         print("Total Games:", self.played)
         print("Victories:", self.won)
         print("defeats", self.lost)
 
         competition_games = self.won + self.lost
         if competition_games > 0:
-          print("Percent Won", (self.won / (self.won+self.lost)) * 100)
-          print("Percent Lost", (self.lost / (self.won+self.lost)) * 100)
+            print("Percent Won", (self.won / (self.won + self.lost)) * 100)
+            print("Percent Lost", (self.lost / (self.won + self.lost)) * 100)
