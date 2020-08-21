@@ -133,30 +133,6 @@ def move_to_most_open_area(board, x, y, possible_moves):
         
         most_occupied_direction = percent_occupied.index(max(percent_occupied))
         del possible_moves[most_occupied_direction]
-    """    
-    if 'up' in possible_moves and 'down' in possible_moves:
-        occupied_up = np.count_nonzero(board[:,y+1:] > SAFE_SPACE)
-        occupied_down = np.count_nonzero(board[:,:y] > SAFE_SPACE)
-        total_up = board[:,y+1:].size - occupied_up
-        total_down = board[:,:y].size - occupied_down
-        print("Percent Occupied up vs Down: ")
-        print("Up:", occupied_up / total_up, ", Down:", occupied_down / total_down)
-        if free_room(board[x,y+1:]) < free_room(np.flip(board[x,:y])) or abs(occupied_up / total_up) > abs(occupied_down / total_down):
-            possible_moves.remove('up')
-        elif free_room(board[x,y+1:]) > free_room(np.flip(board[x,:y])) or abs(occupied_up / total_up) < abs(occupied_down / total_down):
-            possible_moves.remove('down')
-    
-    if 'left' in possible_moves and 'right' in possible_moves:
-        occupied_right = np.count_nonzero(board[x+1:,:] > SAFE_SPACE)
-        occupied_left = np.count_nonzero(board[:x,:] > SAFE_SPACE)
-        total_left = board[:x,:].size - occupied_left
-        total_right = board[x+1:,:].size - occupied_right
-        
-        if free_room(board[x+1:,y]) < free_room(np.flip(board[:x,y])) or abs(occupied_right / total_right) > abs(occupied_left / total_left):
-            possible_moves.remove('right')
-        elif free_room(board[x+1:,y]) > free_room(np.flip(board[:x,y])) or abs(occupied_right / total_right) < abs(occupied_left / total_left):
-            possible_moves.remove('left')
-    """
     return possible_moves
 
 """
